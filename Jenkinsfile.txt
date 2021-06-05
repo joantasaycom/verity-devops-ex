@@ -54,12 +54,21 @@ pipeline {
         }
 		//Code ends for stage Unit Test
 		
-		//Code starts for stage Code Coverage
 		stage('Code Coverage') {
-            steps {
-                sh 'mvn jacoco:report'
+                steps {
+                    sh 'mvn jacoco:report'
+                    publishHTML(target: [reportDir:'target/site/jacoco', reportFiles: 'index.html', reportName: 'Code Coverage'])
+
+                    jacoco(
+			      execPattern: 'target/*.exec',
+			      classPattern: 'target/classes',
+			      sourcePattern: 'src/main/java',
+			      exclusionPattern: 'src/test*'
+                 )
+                }
+
             }
-        }
+
 		//Code ends for stage Code Coverage
     }
 	
